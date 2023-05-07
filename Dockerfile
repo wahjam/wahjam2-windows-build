@@ -33,7 +33,6 @@ RUN dnf5 -y --setopt=tsflags=nodocs install \
         which \
         xz && \
     dnf5 clean all
-COPY meson.mk /tmp/
 RUN wget -O /tmp/asiosdk.zip 'https://www.steinberg.net/asiosdk' && \
     cd /usr/local && \
     unzip /tmp/asiosdk.zip && \
@@ -41,8 +40,7 @@ RUN wget -O /tmp/asiosdk.zip 'https://www.steinberg.net/asiosdk' && \
     mv asiosdk* asiosdk2 && \
     cd / && \
     git clone https://github.com/mxe/mxe.git && cd /mxe && \
-    git checkout 0e426c5767773fb2863e9c53feb0e9baaf356f8b && \
-    mv /tmp/meson.mk /mxe/src/ && \
+    git checkout b57aabf11c6ade24df97c0fc953092ca80dac799 && \
     sed -i 's%--with-winapi=.*$%--with-winapi=wmme,directx,wdmks,wasapi,asio \\%' src/portaudio.mk && \
     sed -i 's%gcc%g++%' src/portaudio.mk && \
     make -j$(nproc) MXE_TARGETS=x86_64-w64-mingw32.shared \
@@ -56,7 +54,11 @@ RUN wget -O /tmp/asiosdk.zip 'https://www.steinberg.net/asiosdk' && \
         qt6-qtsvg \
         qtkeychain-qt6 && \
     make -C /mxe clean-junk && \
-    rm -rf /usr/local/asiosdk2 /mxe/pkg/* /mxe/.ccache /mxe/.git
+    rm -rf /mxe/pkg/* /mxe/.ccache /mxe/.git
+
+# TODO remove mono-devel and move osslsigncode to the main dnf install section
+RUN dnf5 -y --setopt=tsflags=nodocs install osslsigncode && \
+    dnf5 clean all
 
 # meson uses Python's zipapp module and it hardcodes 744 permissions
 RUN chmod 755 /mxe/usr/x86_64-pc-linux-gnu/bin/meson
