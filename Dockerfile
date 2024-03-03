@@ -1,6 +1,6 @@
 ARG ENABLE_ASIO
 ARG ENABLE_CODE_SIGNING
-FROM registry.fedoraproject.org/fedora-minimal:38
+FROM registry.fedoraproject.org/fedora-minimal:39
 RUN dnf5 -y --setopt=tsflags=nodocs install \
         autoconf \
         automake \
