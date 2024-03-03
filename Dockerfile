@@ -1,4 +1,5 @@
 ARG ENABLE_ASIO
+ARG ENABLE_CODE_SIGNING
 FROM registry.fedoraproject.org/fedora-minimal:38
 RUN dnf5 -y --setopt=tsflags=nodocs install \
         autoconf \
@@ -18,9 +19,9 @@ RUN dnf5 -y --setopt=tsflags=nodocs install \
         make \
         mesa-libGL-devel \
         mingw32-nsis \
+        java-17-openjdk-headless \
         openssl \
         openssl-devel \
-        osslsigncode \
         p7zip \
         patch \
         pcre-devel \
@@ -34,6 +35,14 @@ RUN dnf5 -y --setopt=tsflags=nodocs install \
         which \
         xz && \
     dnf5 clean all
+RUN if [ -n "$ENABLE_CODE_SIGNING" ]; then \
+        wget -O /tmp/CodeSignTool.zip 'https://www.ssl.com/download/codesigntool-for-linux-and-macos/' && \
+        mkdir -p /usr/local/CodeSignTool && \
+        cd /usr/local/CodeSignTool && \
+        unzip /tmp/CodeSignTool.zip && \
+        rm /tmp/CodeSignTool.zip && \
+        cd /; \
+    fi
 RUN if [ -n "$ENABLE_ASIO" ]; then \
         cd /usr/local && \
         wget -O /tmp/asiosdk.zip 'https://www.steinberg.net/asiosdk' && \
