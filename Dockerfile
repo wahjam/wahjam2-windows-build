@@ -52,7 +52,7 @@ RUN if [ -n "$ENABLE_ASIO" ]; then \
         cd /; \
     fi && \
     git clone https://github.com/mxe/mxe.git && cd /mxe && \
-    git checkout b57aabf11c6ade24df97c0fc953092ca80dac799 && \
+    git checkout 009902d3ccb83119e4b7d47fbf9ad6392c4ab751 && \
     if [ -n "$ENABLE_ASIO" ]; then \
         sed -i 's%--with-winapi=.*$%--with-winapi=wmme,directx,wdmks,wasapi,asio \\%' src/portaudio.mk; \
     fi && \
