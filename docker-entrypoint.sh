@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-# Do not export the password in case a subprocess logs or saves its environment
-export -n PVK_PASSWORD
+# Do not export sensitive environment variables in case a subprocess logs or saves its environment
+export -n CODE_SIGN_TOOL_USERNAME CODE_SIGN_TOOL_PASSWORD CODE_SIGN_TOOL_TOTP_SECRET
 
 export MESON=x86_64-w64-mingw32.shared-meson
 
@@ -33,4 +33,7 @@ $MESON "${meson_opts[@]}" build
 cd build
 $NINJA
 
-PVK_PASSWORD="$PVK_PASSWORD" /usr/src/wahjam2/installer/windows/make-installer.sh "$(pwd)"
+CODE_SIGN_TOOL_USERNAME="$CODE_SIGN_TOOL_USERNAME" \
+CODE_SIGN_TOOL_PASSWORD="$CODE_SIGN_TOOL_PASSWORD" \
+CODE_SIGN_TOOL_TOTP_SECRET="$CODE_SIGN_TOOL_TOTP_SECRET" \
+/usr/src/wahjam2/installer/windows/make-installer.sh "$(pwd)"
