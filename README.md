@@ -17,15 +17,22 @@ or:
 
 The following container volumes may be set:
 - /usr/src/wahjam2: The Wahjam2 source tree.
-- /usr/src/wahjam2/installer/<appname>.spc and
-  /usr/src/wahjam2/installer/<appname>.pvk: Code signing certificate and
-  private key file. Optional, and if present, both must be provided.
 
 The following optional environment variables may be passed to the image:
 - APPNAME: The name of the application (<appname>.exe). Defaults to wahjam2.
 - ORGNAME: The name of the organization. Defaults to "Wahjam2 Project".
 - ORGDOMAIN: The domain name of the organization. Defaults to wahjam.org.
-- PVK\_PASSWORD: The code signing private key file password.
+
+If the image was built with `podman build --build-arg=ENABLE_CODE_SIGNING=1`
+then the following environment variables may be passed to the image for
+SSL.com's CodeSignTool:
+- CODE_SIGN_TOOL_USERNAME
+- CODE_SIGN_TOOL_PASSWORD
+- CODE_SIGN_TOOL_TOTP_SECRET
+
+If the image was built with `podman build --build-arg=ENABLE_ASIO=1` then
+Steinberg ASIO support will be available in PortAudio. Note that ASIO has
+licensing requirements that you must meet before distributing the software.
 
 The [mxe](https://mxe.cc/) cross-compilation environment is used. The mxe
 version is frozen to a specific git tag to ensure that the exact same package
